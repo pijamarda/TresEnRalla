@@ -89,7 +89,7 @@ fn main()
     	}    	
 
     	//Comprobamos a ver si hay alguna ralla ya completada
-    	if check_ralla(&tablero);
+    	if check_ralla(&tablero)
     	{
     		if !jugador1_turno
     		{
@@ -101,17 +101,17 @@ fn main()
     		}
     		fin = true;
     	}
+    	//Si no hay ninguna ralla comprobamos si acaba el programa porque
+    	//esten todos los huecos ocupados
     	else if fin
     	{
-    		println!("Empate!");
-    	}
-
-    	
-
-    	
+    		println!("Tablas!");
+    	}    	
     }
 }
 
+//ASCII del tablero
+//TODO: Aqui es donde podriamos sacar en modo grafico el estado del tablero
 fn print_tablero(t: &[i32])
 {	
 	let mut i: i32 = 0;
@@ -127,17 +127,21 @@ fn print_tablero(t: &[i32])
 	println!("");
 }
 
-//Rust no tiene la operacion resto, asi que creamos una
+//Rust no tiene la operacion resto, asi que creamos una que he visto en internet
+//o si la tiene en alguna libreria no la he visto
 fn calc_resto(x: i32, y: i32) -> i32
 {
 	let resultado: i32 = ((x % y) + y) % y;
 	return resultado;
 }
 
+//Le pasamos el tablero y la posicion para validar que haya un hueco
 fn calc_posicion_valida(posicion: i32, t: &[i32]) -> bool
 {
 	let mut resultado = false;	
 	//Es decir que si la posicion esta vacia
+	//restamos 1, puesto que el usuario utiliza valores entre 1..9
+	//pero el array es desde 0..8
 	if t[(posicion-1) as usize] == 0
 	{
 		resultado = true;
@@ -145,8 +149,10 @@ fn calc_posicion_valida(posicion: i32, t: &[i32]) -> bool
 	return resultado
 }
 
+
 fn modificar_tablero(opcion: i32, posicion: i32,t: &mut [i32])
 {
+	//Igual que antes restamos 1 porque el usuario trata con numero del 1..9
 	t[(posicion-1) as usize] = opcion;
 }
 
@@ -154,6 +160,8 @@ fn check_ralla(t: &[i32]) -> bool
 {
 	let mut resultado = false;
 	//vamos a comprobar que existe alguna linea
+
+	//Empezamos desde la esquina arriba izquierda
 	if t[0] != 0
 	{
 		if t[0] == t[1] && t[1] == t[2]
@@ -170,6 +178,7 @@ fn check_ralla(t: &[i32]) -> bool
 		}
 	}
 
+	//arriba centro
 	if t[1] != 0
 	{
 		if t[1] == t[4] && t[4] == t[7]
@@ -178,6 +187,7 @@ fn check_ralla(t: &[i32]) -> bool
 		}		
 	}
 
+	//izquierda centro
 	if t[3] != 0
 	{
 		if t[3] == t[4] && t[4] == t[5]
@@ -186,6 +196,7 @@ fn check_ralla(t: &[i32]) -> bool
 		}		
 	}
 
+	//esquina arriba derecha
 	if t[2] != 0
 	{
 		if t[2] == t[5] && t[5] == t[8]
