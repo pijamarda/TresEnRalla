@@ -6,9 +6,10 @@ fn main()
 	//0 es vacio
 	//1 es cruz
 	//2 es circulo
-	let mut tablero: [i32; 9] = [0,0,0,
-							 0,0,0,
-							 0,0,0];
+	let mut tablero: [i32; 9] = 
+		[0,0,0,
+		 0,0,0,
+		 0,0,0];
     
     print_tablero(&tablero);
 
@@ -17,16 +18,11 @@ fn main()
     while !fin
     {
     	let mut opcion = 1;
+    	//hay que poner aqui la declaracion de la variable porque estamos haciendo
+    	//mas abajo una reasignacion de tipo, de manera que si lo declaramos fuera
+    	//al utilizar trim().parse() da un error
     	let mut posicion = String::new();
-    	/*println!("Jugador 1, elige tu movimiento: 1 o 2");
-    	io::stdin().read_line(&mut opcion)
-    		.ok()
-    		.expect("Error al leer la linea");
-
-    	let opcion: i32 = opcion.trim().parse()
-    		.ok()
-    		.expect("Debes introducir un numero, linea 27");
-		*/
+    	
 		if jugador1_turno
 		{
 			println!("Jugador 1, elige la posicion: 1 al 9");	
@@ -36,15 +32,19 @@ fn main()
 		    println!("Jugador 2, elige la posicion: 1 al 9");
 		}
     	
+
     	io::stdin().read_line(&mut posicion)
     		.ok()
     		.expect("Error al leer la linea");
 
+    	//Convertimos a un entero el numero que se haya puesto
+    	//si no puede convertirlo da un error y sale del programa
+    	//TODO: Ver en la guia como hacer que el programa continue
     	let posicion: i32 = posicion.trim().parse()
     		.ok()
     		.expect("Debes introducir un numero, linea 36");
 
-
+    	//Despues comprobamos que el numero introducido esta dentro de las posiciones validas
     	if posicion >= 1 || posicion <= 9
     	{    		
     		if jugador1_turno
@@ -56,10 +56,13 @@ fn main()
     			opcion = 2;
     		}
 
+    		//Miramos a ver si la posicion donde queremos colocarla es un 0
 	    	if !calc_posicion_valida(posicion, &tablero)
 	    	{
 	    		println!("La posicion elegida ya ha sido ocupada");
 	    	}
+	    	//Si no es asi, en principio ha pasado todas las validaciones y modificamos
+	    	//el Array que es el tablero y cambiamos el turno
 	    	else
 	    	{
 	    		modificar_tablero(opcion, posicion, &mut tablero);	    		
@@ -71,7 +74,12 @@ fn main()
     		println!("La posicion debe ser entre 1 y 9");
     	}
     	print_tablero(&tablero);
+
     	fin = true;
+
+    	//Recorremos el Array para ver si hay algun cero, en cuanto encuentra 1 
+    	// el fin se pone a false, de manera que si no hay ningun cero, es que ya
+    	//tenemos el tablero completo
     	for x in tablero.iter()
     	{	    		
     		if *x == 0
@@ -79,9 +87,9 @@ fn main()
     			fin = false;
     		}
     	}    	
-    	fin = fin || check_ralla(&tablero);
 
-    	if fin
+    	//Comprobamos a ver si hay alguna ralla ya completada
+    	if check_ralla(&tablero);
     	{
     		if !jugador1_turno
     		{
@@ -91,7 +99,16 @@ fn main()
     		{
     		 	println!("Enhorabuena Jugador 2, has ganado");   
     		}
+    		fin = true;
     	}
+    	else if fin
+    	{
+    		println!("Empate!");
+    	}
+
+    	
+
+    	
     }
 }
 
